@@ -354,3 +354,25 @@ Headless 4.3: exit 0, 0 script errors; shader has no parse errors.
 
 ### 🔧 How It Was Solved
 - Large-file scan ran BEFORE `git add` so nothing risky could be staged; `.gitignore` written before staging so the cache never enters the index.
+
+---
+
+## Glass fix — color-keying failed, canopy reverted, final state (Oct 20, 2026)
+
+### ⚠️ Problems & Bugs Encountered (the transparency saga, 3 attempts)
+1. **Shader heuristic v1** (`dark + low-saturation pixels → alpha 0.28`): made **entire cars transparent** — the dark-green sedan's paint matched the rule. User: "all car get transparent but i told u to only make glasses transparent".
+2. **Histogram analysis killed color-keying for good**: the textures are 128×128 gradient-shaded atlases; the **grey car's body IS the same gray as its windows** (72,72,72 body vs 136,136,136 windows, both in every car). No per-pixel rule can separate glass from paint.
+3. **Glass canopy workaround** (translucent band box over each cabin): functioned but read as a visual glitch — user: "what this weird transparent thing in all vehicles?"
+
+### ✅ Final state (what remains)
+- **Cars: original imported look** — the baked dark windows already read as tinted glass (like GTA VC). Liveries still re-texture via surface override.
+- **Kept**: two paint-matched animated doors (enter from your side / exit driver side), full sound choreography, driver visible & seated (seat 0.92, model sunk −0.12 m).
+- **Removed**: `GLASS_CODE` shader, `_glass_shader`, `_spawn_glass()` canopy, `_glass` member.
+- **Files**: `game/scripts/car.gd`, `game/scripts/player.gd`.
+
+### 🔧 Lessons
+- Per-pixel keying needs FLAT colors — gradient atlases defeat it.
+- Decorative overlay geometry on a car reads as a bug unless it exactly matches the body line. When the baked art already looks acceptable, don't fight it.
+
+### Validation
+Headless 4.3 run after removal: exit 0, 0 script errors. Owner confirmed visually: "ok now looks good".

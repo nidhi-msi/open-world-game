@@ -16,32 +16,6 @@ const STEER_SPEED := 6.0
 const SEAT_LOCAL := Vector3(-0.5, 0.92, 0.2)
 const DOOR_OPEN_RAD := 1.05    # how far the cosmetic driver door swings (≈60°)
 
-## Body shader: the car texture as-is, but dark neutral pixels (painted-on
-## windows) render as semi-transparent glass. cull_disabled shows the shell's
-## far side as a fake interior; depth_draw_opaque keeps self-sorting sane.
-const GLASS_CODE := "
-shader_type spatial;
-render_mode cull_disabled, depth_draw_opaque;
-
-uniform sampler2D base_tex : source_color, filter_linear_mipmap;
-uniform float glass_alpha : hint_range(0.0, 1.0) = 0.28;
-
-void fragment() {
-	vec4 tex = texture(base_tex, UV);
-	float mx = max(tex.r, max(tex.g, tex.b));
-	float mn = min(tex.r, min(tex.g, tex.b));
-	float sat = (mx - mn) / max(mx, 0.0001);
-	ALBEDO = tex.rgb;
-	ROUGHNESS = 0.75;
-	METALLIC = 0.0;
-	if (mx < 0.2 && sat < 0.45) {
-		ALPHA = glass_alpha;
-	}
-}
-"
-
-static var _glass_shader: Shader
-
 var _player = null               # untyped on purpose: cross-script dynamic calls
 var _steer := 0.0
 var _model: MeshInstance3D
@@ -106,16 +80,16 @@ func set_model(mesh: Mesh, livery: Texture2D) -> void:
 		_box.shape = bs
 		_box.position = a.position + bs.size * 0.5
 		_box_half_x = maxf(bs.size.x * 0.5, 1.2)
-		# One custom material for the whole body: same texture, but the painted-on
-		# windows become semi-transparent glass so the driver is visible inside.
-		if paint_tex != null:
-			if _glass_shader == null:
-				_glass_shader = Shader.new()
-				_glass_shader.code = GLASS_CODE
-			var sm := ShaderMaterial.new()
-			sm.shader = _glass_shader
-			sm.set_shader_parameter("base_tex", paint_tex)
-			_model.material_override = sm
+	if paint_tex != null and mesh != null:
+		# Keep the imported look; liveries simply re-texture the same material.
+		var src_mat := mesh.surface_get_material(0) as StandardMaterial3D
+		var mat: StandardMaterial3D
+		if src_mat != null:
+			mat = src_mat.duplicate() as StandardMaterial3D
+		else:
+			mat = StandardMaterial3D.new()
+		mat.albedo_texture = paint_tex
+		_model.set_surface_override_material(0, mat)
 	_spawn_door(paint_tex)
 
 
