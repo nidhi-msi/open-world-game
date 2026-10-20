@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bvhsgnckwysoc"
+path="res://.godot/imported/Car_Horn.ogg-fbcbc7d51f5c3333e16ee2a4992be96f.oggvorbisstr"
+
+[deps]
+
+source_file="res://Sound effects/Car_Horn.ogg"
+dest_files=["res://.godot/imported/Car_Horn.ogg-fbcbc7d51f5c3333e16ee2a4992be96f.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

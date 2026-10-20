@@ -1,0 +1,12 @@
+# Blender 5.1.0 MTL File: 'Low-Poly_Roads_FREE_Textured_v1.1.0.blend'
+# www.blender.org
+
+newmtl Road10Material
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+map_Kd /Users/maros/Desktop/14_Modular_Roads/Base/Ship/PLUS/Road6_A.png

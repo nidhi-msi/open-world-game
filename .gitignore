@@ -1,0 +1,10 @@
+# Godot 4+ cache (regenerated when the editor opens — never commit)
+.godot/
+
+# Windows shell junk
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.log

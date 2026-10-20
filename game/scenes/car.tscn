@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/car.gd" id="1"]
+
+[sub_resource type="BoxShape3D" id="1"]
+size = Vector3(2.4, 1.8, 6)
+
+[node name="Car" type="VehicleBody3D"]
+mass = 650.0
+script = ExtResource("1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1, 0)
+shape = SubResource("1")
+
+[node name="ModelRoot" type="Node3D" parent="."]
+
+[node name="WheelFL" type="VehicleWheel3D" parent="."]
+position = Vector3(1.05, 0.6, -2)
+wheel_radius = 0.35
+wheel_rest_length = 0.25
+wheel_travel = 0.25
+wheel_friction_slip = 10.0
+use_as_steering = true
+use_as_traction = true
+
+[node name="WheelFR" type="VehicleWheel3D" parent="."]
+position = Vector3(-1.05, 0.6, -2)
+wheel_radius = 0.35
+wheel_rest_length = 0.25
+wheel_travel = 0.25
+wheel_friction_slip = 10.0
+use_as_steering = true
+use_as_traction = true
+
+[node name="WheelRL" type="VehicleWheel3D" parent="."]
+position = Vector3(1.05, 0.6, 2)
+wheel_radius = 0.35
+wheel_rest_length = 0.25
+wheel_travel = 0.25
+wheel_friction_slip = 10.0
+use_as_traction = true
+
+[node name="WheelRR" type="VehicleWheel3D" parent="."]
+position = Vector3(-1.05, 0.6, 2)
+wheel_radius = 0.35
+wheel_rest_length = 0.25
+wheel_travel = 0.25
+wheel_friction_slip = 10.0
+use_as_traction = true
+
+[node name="EngineLoop" type="AudioStreamPlayer3D" parent="."]
+
+[node name="Sfx" type="AudioStreamPlayer3D" parent="."]
+
+[node name="Sfx2" type="AudioStreamPlayer3D" parent="."]
